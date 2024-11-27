@@ -10,32 +10,33 @@ const todoInput = document.querySelector("#todo");
 const timeInput = document.querySelector("#time");
 const todoContainer = document.querySelector(".todo-container");
 // Load existing todos on page load
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
     loadExistingTodos();
 });
 function loadExistingTodos() {
     try {
         const todos = JSON.parse(localStorage.getItem("todos") || "[]");
-        todoContainer.innerHTML = '';
+        todoContainer.innerHTML = "";
         todos.forEach((todo) => {
             renderTodoItem(todo);
         });
     }
     catch (error) {
-        console.error('Error loading todos:', error);
+        console.error("Error loading todos:", error);
     }
 }
 function renderTodoItem(todo) {
     const div = document.createElement("div");
-    div.setAttribute('data-id', todo.id.toString());
+    div.setAttribute("data-id", todo.id.toString());
     div.classList.add("todo-item");
     if (todo.completed) {
         div.classList.add("completed");
     }
-    div.innerHTML = `
-        <div class="todo-checkbox ${todo.completed ? 'checked' : ''}">
+    div.innerHTML = `<div class="todo-checkbox ${todo.completed ? "checked" : ""}">
             <div class="checkmark">
-                ${todo.completed ? '<img src="Image/checkMark.png" alt="checkmark">' : ''}
+                ${todo.completed
+        ? '<img src="Image/checkMark.png" alt="checkmark">'
+        : ""}
             </div>
         </div>
         <div class="todo-text">${todo.title}</div>
@@ -63,27 +64,28 @@ handleCreateTodo = (todoText, timeValue) => {
         const newTodo = new Todo({
             id: Date.now(),
             title: todoText,
-            time: timeValue
+            time: timeValue,
         });
         const todoItem = new TodoItem(newTodo);
         todoItem.setTodo();
         renderTodoItem(newTodo);
     }
     catch (error) {
-        console.error('Error creating todo:', error);
+        console.error("Error creating todo:", error);
     }
 };
 // Event delegation for todo actions
-todoContainer.addEventListener('click', (e) => {
+todoContainer.addEventListener("click", (e) => {
     const target = e.target;
-    const todoItem = target.closest('.todo-item');
-    const todoId = todoItem === null || todoItem === void 0 ? void 0 : todoItem.getAttribute('data-id');
+    const todoItem = target.closest(".todo-item");
+    const todoId = todoItem === null || todoItem === void 0 ? void 0 : todoItem.getAttribute("data-id");
     if (!todoId)
         return;
-    if (target.classList.contains('delete-btn')) {
+    if (target.classList.contains("delete-btn")) {
         handleDeleteTodo(todoId);
     }
-    else if (target.classList.contains('complete-btn') || target.classList.contains('todo-checkbox')) {
+    else if (target.classList.contains("complete-btn") ||
+        target.classList.contains("todo-checkbox")) {
         handlemarkTodo(todoId);
     }
 });
@@ -99,7 +101,7 @@ handleDeleteTodo = (id) => {
         }
     }
     catch (error) {
-        console.error('Error deleting todo:', error);
+        console.error("Error deleting todo:", error);
     }
 };
 // Mark todo handler
@@ -115,23 +117,24 @@ handlemarkTodo = (id) => {
         localStorage.setItem("todos", JSON.stringify(updatedTodos));
         const todoElement = document.querySelector(`[data-id="${id}"]`);
         if (todoElement) {
-            todoElement.classList.toggle('completed');
-            const checkbox = todoElement.querySelector('.todo-checkbox');
+            todoElement.classList.toggle("completed");
+            const checkbox = todoElement.querySelector(".todo-checkbox");
             if (checkbox) {
-                checkbox.classList.toggle('checked');
-                const checkmark = checkbox.querySelector('.checkmark');
+                checkbox.classList.toggle("checked");
+                const checkmark = checkbox.querySelector(".checkmark");
                 if (checkmark) {
-                    if (checkbox.classList.contains('checked')) {
-                        checkmark.innerHTML = '<img src="Image/checkMark.png" alt="checkmark">';
+                    if (checkbox.classList.contains("checked")) {
+                        checkmark.innerHTML =
+                            '<img src="Image/checkMark.png" alt="checkmark">';
                     }
                     else {
-                        checkmark.innerHTML = '';
+                        checkmark.innerHTML = "";
                     }
                 }
             }
         }
     }
     catch (error) {
-        console.error('Error marking todo:', error);
+        console.error("Error marking todo:", error);
     }
 };
